@@ -3,6 +3,7 @@ const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 const path = require("path");
 
 module.exports = {
+  
   mode: "production",
   entry: "./js/dashboard_main.js",
   performance: {
@@ -36,9 +37,4 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: "Webpack Output",
-    }),
-  ],
 };

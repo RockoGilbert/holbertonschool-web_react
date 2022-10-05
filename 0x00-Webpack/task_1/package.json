@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode development",
-    "build": "webpack",
+    "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development --open"
   },
   "keywords": [],
@@ -17,9 +17,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "html-webpack-plugin": "^5.5.0",
     "jquery": "^3.6.1",
-    "lodash": "^4.17.21",
-    "mini-css-extract-plugin": "^2.6.1"
+    "lodash": "^4.17.21"
   }
 }

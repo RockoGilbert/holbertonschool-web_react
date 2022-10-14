@@ -7,6 +7,7 @@ import Footer from '../Footer/Footer'
 import PropTypes from 'prop-types'; // ES6
 import { getLatestNotification } from '../utils/utils'
 
+eslint-disable jest/valid-expect;
 const listCourses = [
   { id: 1, name: 'ES6', credit: 60 },
   { id: 2, name: 'Webpack', credit: 20 },

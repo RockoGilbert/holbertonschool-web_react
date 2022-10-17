@@ -1,0 +1,42 @@
+{
+	"name": "task_1",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./task_1/dashboard/index.js",
+	"scripts": {
+		"start": "webpack serve --mode development --config config/webpack.config.js --open",
+		"build": "webpack-dev-server --mode production --config config/webpack.config.js",
+		"test": "jest",
+		"test-watch": "jest --watch"
+	},
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@babel/core": "^7.19.3",
+		"@babel/preset-env": "^7.19.4",
+		"@babel/preset-react": "^7.16.7",
+		"@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
+		"babel-loader": "^8.2.5",
+		"chai": "^4.3.6",
+		"css-loader": "^6.7.1",
+		"file-loader": "^6.2.0",
+		"image-webpack-loader": "^8.1.0",
+		"jest": "^27.5.1",
+		"style-loader": "^3.3.1",
+		"webpack": "^5.74.0",
+		"webpack-cli": "^4.9.2",
+		"webpack-dev-server": "^4.7.4"
+	},
+	"dependencies": {
+		"enzyme-adapter-react-16": "^1.15.6",
+		"prop-types": "^15.8.1",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2"
+	},
+	"jest": {
+		"moduleNameMapper": {
+			"\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "babel-jest",
+			"\\.(css|less)$": "<rootDir>/config/setupTests.js"
+		}
+	}
+}

@@ -1,24 +1,39 @@
-import { shallow, mount } from '../../config/setupTests';
-import { StyleSheetTestUtils } from 'aphrodite';
 import React from 'react';
-import BodySection from './BodySection';
+import ReactDOM from 'react-dom';
+import {  mount } from 'enzyme';
 import BodySectionWithMarginBottom from './BodySectionWithMarginBottom';
+import { StyleSheetTestUtils } from 'aphrodite';
+
+describe('BodySectionWithMarginBottom Renders', () => {
+
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+  afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
+
+  const BSMargin = mount(
+    <BodySectionWithMarginBottom title="test title">
+      <p>test child</p>
+    </BodySectionWithMarginBottom>
+  )
+  const bodySection = BSMargin.find('.bodySection');
+  const h2 = BSMargin.find('h2');
+  const p = BSMargin.find('p');
+
+  it('without crashing', () => {
+    expect(BSMargin.length).toBe(1);
+  });
 
 
-describe('BodySectionWithMarginBottom', () => {
-	beforeEach(() => {
-		StyleSheetTestUtils.suppressStyleInjection();
-	});
+  it('with correct children', () => {
+    expect(bodySection.length).toBe(1);
+    expect(bodySection.children().length).toBe(2);
+    expect(h2.length).toBe(1);
+    expect(h2.text()).toBe('test title');
+    expect(p.length).toBe(1);
+    expect(p.text()).toBe('test child');
+  });
 
-	it(`Checks that component correctly renders a <BodySection /> component`, () => {
-		const wrapper = shallow(<BodySectionWithMarginBottom title="test"/>);
-		expect(wrapper.find(BodySection).exists()).toBe(true);
-	})
-
-	it(`Checks that props are passed correctly to child component`, () => {
-		const wrapper = shallow(<BodySectionWithMarginBottom title="test title"><p>test children</p></BodySectionWithMarginBottom>)
-		expect(wrapper.find(BodySection).props().title).toBe('test title');
-		// p tag is child component in this instance
-		expect(wrapper.find('p').text()).toBe('test children');
-	})
-})
+});

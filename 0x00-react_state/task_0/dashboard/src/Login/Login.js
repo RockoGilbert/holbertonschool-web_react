@@ -1,72 +1,65 @@
-import React, { Component } from 'react'
-import { StyleSheet, css } from 'aphrodite'
-import WithLoggingHOC from '../HOC/WithLogging'
+import React, { Component } from "react";
+import { StyleSheet, css } from "aphrodite";
+
+const styles = StyleSheet.create({
+  form: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: "1rem",
+    justifyContent: "space-between",
+    width: "41%",
+    "@media (max-width: 900px)": {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "left",
+
+     },
+  },
+  input: {
+    width: "100%",
+    height: "2rem",
+    marginBottom: "1rem",
+    borderRadius: "5px",
+    border: "1px solid #e0354b",
+    fontSize: "1rem",
+    "@media (max-width: 900px)": {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "left",
+
+   },
+  },
+  button: {
+    border: '1px solid lightgrey',
+    borderRadius: '0.5rem',
+    padding: '.5rem .75rem',
+    ':hover': {
+      outline: 'none',
+      border: '1px solid #e11d3f',
+    },
+  },
+});
 
 class Login extends Component {
-	render() {
-		return (
-			<React.Fragment>
-				<div className="App">
-					<main className={css(loginStyles.appBody)}>
-						<p>Login to access the full dashboard</p>
-						<div className={css(loginStyles.inputs)}>
-							<label className={css(loginStyles.label)} htmlFor="email" onClick={() => {
-								// select corresponding input
-								document.getElementById('password').focus();
-							}}>Email</label>
-							<input type="email" id="email" className={css(loginStyles.input)} />
-							<label className={css(loginStyles.label)} htmlFor="password" onClick={() => {
-								// select corresponding input
-								document.getElementById('password').focus();
-							}}>Password</label>
-							<input type="password" id="password" className={css(loginStyles.input)} />
-							<button className={css(loginStyles.button)}>OK</button>
-						</div>
-					</main>
-				</div>
-			</React.Fragment>
-		)
-	}
-}
+  render() {
+    return (
+      <React.Fragment>
+          <p>Login to access the full dashboard</p>
+          <form className={css(styles.form)}>
+            <label className={css(styles.smallSize)} htmlFor="email">
+              Email:
+              <input className={css(styles.input)} type="email" placeholder="Email" id="email" />
+            </label>
+            <label htmlFor="pw">
+              Password:
+              <input className={css(styles.input)} type="password" placeholder="Password" id="pw" />
+            </label>
+            <button className={css(styles.button)} type="button">OK</button>
+          </form>
+      </React.Fragment>
+    );
+  }
+};
 
-const primaryColor = '#E11D3F';
-
-const loginStyles = StyleSheet.create({
-	appBody: {
-		display: 'flex',
-		flexDirection: 'column',
-		marginBottom: '3rem',
-		height: '100%',
-	},
-
-	inputs: {
-		'@media (min-width: 350px)': {
-			display: 'flex',
-			flexDirection: 'column',
-			maxWidth: '200px'
-		},
-		'@media (min-width: 900px)': {
-			display: 'flex',
-			flexDirection: 'row',
-		}
-	},
-
-	input: {
-		height: '15px',
-		marginLeft: '0.2rem',
-		marginTop: '0.5rem',
-	},
-
-	label: {
-		marginTop: '0.5rem',
-	},
-
-	button: {
-		height: '21px',
-		marginTop: '0.6rem',
-		maxWidth: '40px',
-	}
-})
-
-
-export default WithLoggingHOC(Login)
+export default Login;

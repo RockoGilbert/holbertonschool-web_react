@@ -1,33 +1,20 @@
 import React, { Component } from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-
-// Reusable component
-class BodySection extends Component {
-	render() {
-		const { title } = this.props
-
-		return (
-			<div className="BodySection">
-				<h2>{title}</h2>
-				{/* All remaining prop children are put into this span */}
-				{this.props.children}
-			</div>
-		)
-	}
+export default class BodySection extends Component {
+  render() {
+    return (
+      <>
+        <div className="bodySection">
+          <h2>{this.props.title}</h2>
+          {this.props.children}
+        </div>
+      </>
+    );
+  }
 }
-
 
 BodySection.propTypes = {
-	title: propTypes.string.isRequired,
-	children: propTypes.oneOfType([
-		propTypes.string,
-		propTypes.element
-	])
-}
-
-BodySection. defaultProps = {
-	children: <React.Fragment />
-}
-
-export default BodySection
+  title: PropTypes.string.isRequired,
+  // children: PropTypes.element.isRequired,
+};

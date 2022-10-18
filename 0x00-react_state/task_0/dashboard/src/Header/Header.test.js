@@ -1,23 +1,28 @@
-import { shallow } from 'enzyme';
-import React from 'react';
-import Header from './Header';
+import React from "react";
+import { shallow } from "enzyme";
+import Header from "./Header";
+import { StyleSheetTestUtils } from "aphrodite";
 
 
-// shallow render header component
-describe('<Header />', () => {
-	beforeEach(() => {
-		StyleSheetTestUtils.suppressStyleInjection();
-	});
+describe("Header /", () => {
 
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+  afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
 
-	it('Tests that Header renders without crashing', () => {
-		const wrapper = shallow(<Header />);
-		expect(wrapper.exists()).toBe(true);
-	})
-
-	it('Tests that the component renders <img> and <h1> tags', () => {
-		const wrapper = shallow(<Header />);
-		expect(wrapper.exists('img')).toBe(true);
-		expect(wrapper.exists('h1')).toBe(true);
-	})
+  it("renders without crashing", () => {
+    const wrapper = shallow(<Header />);
+    expect(wrapper.exists()).toBe(true);
+  });
+  it("renders img tag", () => {
+    const wrapper = shallow(<Header />);
+    expect(wrapper.find("img").exists()).toBe(true);
+  })
+  it("renders h1 tag", () => {
+    const wrapper = shallow(<Header />);
+    expect(wrapper.find("h1").exists()).toBe(true);
+  })
 });

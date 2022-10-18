@@ -1,66 +1,71 @@
-import React from 'react'
+import React, { Component } from 'react';
+import PropTypes, { string } from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
-import propTypes from 'prop-types'
 
+const styles = StyleSheet.create({
+  tblHdr: {
+    borderBottom: '1px solid lightgrey',
+  },
+  colHdr: {
+    textAlign: 'left',
+    borderBottom: '1px solid lightgrey',
+    padding: '10px',
+  },
+  colHdr2: {
+    textAlign: 'left',
+    borderBottom: '1px solid black',
+    padding: '10px',
+  },
+  hdrStyle: {
+    backgroundColor: '#deb5b545',
+  },
+  bdyStyle: {
+    backgroundColor: '#d7e7d7',
+  },
+});
 
-const CourseListRow = ({ isHeader, textFirstCell, textSecondCell }) => {
-	const row_background_color = { backgroundColor: '#f5f5f5ab' };
-	const header_row_background_color = { backgroundColor: '#deb5b545' };
-	let node;
-	let style;
+class CourseListRow extends Component {
+  render() {
+    const { isHeader, textFirstCell, textSecondCell } = this.props;
+    if (isHeader) {
+      if (textSecondCell) {
+        return (
 
-	if (isHeader) {
-		style = header_row_background_color;
-		if (!textSecondCell) {
-			node = <th colSpan="2" className={css(rowStyles.th)}>{textFirstCell}</th>;
-		} else {
-			node =
-				<React.Fragment>
-					<th className={css(rowStyles.NOTth)}>{textFirstCell}</th>
-					<th className={css(rowStyles.NOTth)}>{textSecondCell}</th>
-				</React.Fragment>;
-		}
-	} else {
-		style = row_background_color;
-		node =
-			<React.Fragment>
-				<td>{textFirstCell}</td>
-				<td>{textSecondCell}</td>
-			</React.Fragment>;
-	}
-	return (
-		<tr style={style}>
-			{node}
-		</tr>
-	);
+            <tr className={css(styles.tblHdr)}>
+          <th className={css(styles.colHdr)}>{textFirstCell}</th>
+          <th className={css(styles.colHdr)}>Credit</th>
+        </tr>
+        );
+      }
+      return (
+           <tr className={css(styles.tblHdr)}>
+            <th className={css(styles.colHdr2)} colSpan="2">
+              {textFirstCell}
+            </th>
+          </tr>
+      );
+    }
+    return (
+      <tr className={css(styles.bdyStyle)}>
+        <td >{textFirstCell}</td>
+        <td>{textSecondCell}</td>
+      </tr>
+    );
+  }
 }
-
-const rowStyles = StyleSheet.create({
-	th: {
-		textAlign: 'center',
-		border: `1px solid`,
-		paddingBottom: `0.5rem`
-	},
-
-	NOTth: {
-		textAlign: 'start',
-		borderBottom: `1px solid`,
-	}
-})
-
 
 CourseListRow.defaultProps = {
-	isHeader: false,
-	textSecondCell: null
-}
+  isHeader: false,
+  textSecondCell: null,
+};
 
 CourseListRow.propTypes = {
-	isHeader: propTypes.bool,
-	textFirstCell: propTypes.string.isRequired,
-	textSecondCell: propTypes.oneOfType([
-		propTypes.string,
-		propTypes.number,
-	])
-}
+  isHeader: PropTypes.bool,
+  textFirstCell: PropTypes.string.isRequired,
+  textSecondCell: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+};
 
-export default CourseListRow
+export default CourseListRow;

@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
 
-function WithLogging(WrappedComponent) {
-  // Find name to print in console messages
-  const name = WrappedComponent.name ? WrappedComponent.name : 'Component';
 
-  class InnerWithLogging extends Component {
-    componentDidMount() {
-      console.log(`Component ${name} is mounted`);
-    }
+const WithLoggingHOC = (WrappedComponent) => {
+	const name = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
-    componentWillUnmount() {
-      console.log(`Component ${name} is going to unmount`);
-    }
+	class NewComponent extends Component {
+		componentDidMount() {
+			console.log(`Component ${name} was mounted`);
+		}
 
-    render() {
-      return <WrappedComponent />;
-    }
-  }
+		componentWillUnmount() {
+			console.log(`Component ${name} was unmounted`);
+		}
 
-  return InnerWithLogging;
+		render() {
+			return <WrappedComponent {...this.props} />;
+		}
+	};
+	NewComponent.displayName = `WithLogging(${name})`;
+	return NewComponent;
 }
 
-export default WithLogging;
+export default WithLoggingHOC

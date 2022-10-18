@@ -1,57 +1,54 @@
 {
-  "name": "task_5",
-  "version": "1.0.0",
-  "description": "",
-  "main": "./src/index.js",
-  "scripts": {
-    "start": "webpack serve --mode development --config config/webpack.config.js --open",
-    "build": "webpack --mode production --config config/webpack.config.js",
-    "test": "jest",
-    "test-watch": "jest --watch"
-  },
-  "author": "Rachel Lewis",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.17.5",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.4",
-    "babel-loader": "^8.2.3",
-    "chai": "^4.3.6",
-    "css-loader": "^6.7.1",
-    "eslint": "^8.11.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.31.10",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "file-loader": "^6.2.0",
-    "image-webpack-loader": "^8.1.0",
-    "jest": "^27.5.1",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.11.1"
-  },
-  "dependencies": {
-    "aphrodite": "^2.4.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
-    "prop-types": "^15.8.1",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "styled-components": "^5.3.5",
-    "uuid": "^8.3.2"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "babel-jest",
-      "\\.(css|less)$": "<rootDir>/config/setupTests.js"
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/config/setupTests.js"
-    ],
-    "testEnvironment": "jsdom"
-  }
+	"name": "task_0",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./src/index.js",
+	"scripts": {
+		"start": "webpack serve --mode development --config config/webpack.config.js --open",
+		"build": "webpack-dev-server --mode production --config config/webpack.config.js",
+		"test": "jest ",
+		"test-watch": "jest --watch "
+	},
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@babel/core": "^7.17.5",
+		"@babel/preset-env": "^7.16.11",
+		"@babel/preset-react": "^7.16.7",
+		"babel-loader": "^8.2.3",
+		"chai": "^4.3.6",
+		"css-loader": "^6.7.1",
+		"eslint": "^8.11.0",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-plugin-import": "^2.25.4",
+		"eslint-plugin-jsx-a11y": "^6.5.1",
+		"eslint-plugin-react": "^7.29.4",
+		"eslint-plugin-react-hooks": "^4.3.0",
+		"file-loader": "^6.2.0",
+		"image-webpack-loader": "^8.1.0",
+		"jest": "^27.5.1",
+		"style-loader": "^3.3.1",
+		"webpack": "^5.70.0",
+		"webpack-cli": "^4.9.2",
+		"webpack-dev-server": "^4.7.4"
+	},
+	"dependencies": {
+		"aphrodite": "^2.4.0",
+		"enzyme": "^3.11.0",
+		"enzyme-adapter-react-16": "^1.15.6",
+		"prop-types": "^15.8.1",
+		"react": "^16.14.0",
+		"react-dom": "^16.13.0"
+	},
+	"jest": {
+		"moduleNameMapper": {
+			"\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "babel-jest",
+			"\\.(css|less)$": "<rootDir>/config/setupTests.js"
+		},
+		"setupFilesAfterEnv": [
+			"<rootDir>/config/setupTests.js"
+		],
+		"testEnvironment": "jsdom"
+	}
+	
 }

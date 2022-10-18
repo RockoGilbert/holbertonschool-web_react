@@ -1,29 +1,17 @@
+import { shallow, mount } from '../../config/setupTests';
 import React from 'react';
-import { shallow } from 'enzyme';
-import { StyleSheetTestUtils } from 'aphrodite';
 import BodySection from './BodySection';
 
-describe('BodySection component', () => {
-  // Tests for BodySection component
 
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
-  afterEach(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
+describe('<BodySection />', () => {
+	it(`Renders h2 and children correctly when no children in props`, () => {
+		const wrapper = shallow(<BodySection title="My title" />);
+		expect(wrapper.exists()).toBe(true);
+	})
 
-  it('Verifies that test BodySection rendered with correct h2', () => {
-    const body = <BodySection title="test title"><p>test children node</p></BodySection>;
-    const wrapper = shallow(body);
-    expect(wrapper.find('h2').length).toBe(1);
-    expect(wrapper.find('h2').text()).toBe('test title');
-  });
-
-  it('Verifies that test BodySection rendered with correct p', () => {
-    const body = <BodySection title="test title"><p>test children node</p></BodySection>;
-    const wrapper = shallow(body);
-    expect(wrapper.find('p').length).toBe(1);
-    expect(wrapper.find('p').text()).toBe('test children node');
-  });
-});
+	it(`Renders h2 and children correctly when children in props`, () => {
+		const wrapper = shallow(<BodySection title="test title"><p>test children</p></BodySection>)
+		expect(wrapper.find('h2').text()).toBe('test title');
+		expect(wrapper.find('p').text()).toBe('test children');
+	})
+})

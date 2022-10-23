@@ -1,28 +1,34 @@
-import React from "react";
-import { shallow } from "enzyme";
-import Login from "./Login";
+import React from 'react';
+import { shallow } from 'enzyme';
+import { expect } from 'chai';
+import App from '../App/App';
+import Login from './Login';
 import { StyleSheetTestUtils } from "aphrodite";
 
-
-describe("Login", () => {
-
-  beforeEach(() => {
+describe('Test Login.js', () => {
+  beforeAll(() => {
     StyleSheetTestUtils.suppressStyleInjection();
   });
-  afterEach(() => {
+
+  afterAll(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it("renders without crashing", () => {
-    const wrapper = shallow(<Login />);
-    expect(wrapper.exists()).toBe(true);
+  it('Login without crashing', (done) => {
+    expect(shallow(<Login />).exists());
+    done();
   });
-  it("renders a label", () => {
+
+  it('div with the class App-body', (done) => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.contains(<body className='App-body' />))
+    done();
+  });
+
+  it('renders 2 inputs and 2 labels', (done) => {
     const wrapper = shallow(<Login />);
-    expect(wrapper.find("label").length).toBe(2);
-  })
-  it("renders an input", () => {
-    const wrapper = shallow(<Login />);
-    expect(wrapper.find("input").length).toBe(2);
-  })
+    expect(wrapper.find('input')).to.have.lengthOf(2);
+    expect(wrapper.find('label')).to.have.lengthOf(2);
+    done();
+  });
 });

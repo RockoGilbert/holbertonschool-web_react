@@ -1,48 +1,55 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
-import App from '../App/App';
 import Login from './Login';
-import { StyleSheetTestUtils } from "aphrodite";
+import { mount } from 'enzyme';
+import { assert } from 'chai';
+import { StyleSheetTestUtils } from 'aphrodite';
 
-describe('Test Login.js', () => {
-  beforeAll(() => {
+global.console.log = jest.fn()
+
+describe('Login Renders ', () => {
+  beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('Login without crashing', (done) => {
-    expect(shallow(<Login />).exists());
-    done();
+  const alert = jest.spyOn(window, 'alert').mockImplementation((text) => console.log(text));
+  const loginFunc = jest.fn();
+
+  const login = mount(<Login login={loginFunc} />);
+  const form = login.find('form')
+
+  it('without crashing', () => {
+    assert.equal(login.length, 1);
   });
 
-  it('div with the class App-body', (done) => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.contains(<body className='App-body' />))
-    done();
+  it('label tags x2 & input tags x3', () => {
+    assert.equal(login.find('label').length, 2);
+    assert.equal(login.find('input').length, 3);
   });
 
-  it('renders 2 inputs and 2 labels', (done) => {
-    const wrapper = shallow(<Login />);
-    expect(wrapper.find('input')).to.have.lengthOf(2);
-    expect(wrapper.find('label')).to.have.lengthOf(2);
-    done();
+  it('does not log in when enableSubmit = false and loginSubmit is called', () => {
+    form.simulate('submit');
+    expect(alert).toHaveBeenCalledWith('Please enter email and password to proceed');
   });
 
-  it('verify that the submit button is disabled by default', (done) => {
-    const wrapper = shallow(<Login />);
-    expect(wrapper.state().enableSubmit).to.equal(false);
-    done();
+  // unable to check the state of funcational components
+  // instead check the results of the change
+  it('email change when handleChangeEmail is called', () => {
+    login.find('input').at(0).simulate('change', { target: { value: 'a@b' }});
+    assert.equal(login.find('input').at(0).render()[0].attribs.value, 'a@b')
   });
 
-  it('verify that after changing the value of the two inputs, the button is enabled', (done) => {
-    const wrapper = shallow(<Login />);
-    wrapper.find('input#email').simulate('change', { target: { value: 'test@test.com' } });
-    wrapper.find('input#password').simulate('change', { target: { value: 'test' } });
-    expect(wrapper.state().enableSubmit).to.equal(true);
-    done();
+  it('password change when handleChangePassword is called', () => {
+    login.find('input').at(1).simulate('change', { target: { value: 'c' }})
+    assert.equal(login.find('input').at(1).render()[0].attribs.value, 'c')
   });
+
+  it('enabled submit when email & password entered, loginFunc called', () =>{
+    form.simulate('submit');
+    expect(loginFunc).toHaveBeenCalledWith('a@b', 'c');
+  });
+
 });

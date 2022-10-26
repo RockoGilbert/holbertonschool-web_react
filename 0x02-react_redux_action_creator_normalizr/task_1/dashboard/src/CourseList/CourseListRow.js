@@ -1,58 +1,67 @@
 import React from 'react';
-import PropTypes from 'prop-types'; // ES6
-import { StyleSheet, css } from 'aphrodite';
+import PropTypes from 'prop-types';
+import { css, StyleSheet } from 'aphrodite';
 
-function CourseListRow({ isHeader, textFirstCell, textSecondCell }) {
-  const [checked, setChecked] = React.useState(0);
-  let trContent = '';
-  let bodyStyle = { backgroundColor: '#f5f5f5ab' };
-  let headerStyle = { backgroundColor: '#deb5b545' };
-  const styleInLine = isHeader ? headerStyle : bodyStyle;
-
-  const handleCheck = () => {
-    setChecked(!checked);
-  };
-
-  if (isHeader) {
-    if (textSecondCell === null) {
-      trContent = (<th colSpan='2' className={css(style.thFirt, style.thTd)}>{textFirstCell}</th>);
+export default class CourseListRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggleChecked = this.toggleChecked.bind(this);
+    this.state = {
+      checked: false,
     }
-    else {
-      trContent = (<React.Fragment>
-        <th className={css(style.thTd)}>{textFirstCell}</th>
-        <th className={css(style.thTd)}>{textSecondCell}</th></React.Fragment>);
-    }
-  } else {
-    trContent = (<React.Fragment>
-      <td className={checked ? css(style.thTd , style.rowChecked) : css(style.thTd)}><input type="checkbox" onClick={handleCheck}></input>{textFirstCell}</td>
-      <td className={css(style.thTd)}>{textSecondCell}</td></React.Fragment>);
   }
 
-  return (<tr style={styleInLine}>{trContent}</tr>);
+  toggleChecked() {
+    if (this.state.checked) this.setState({checked: false})
+    else this.setState({checked: true});
+  }
+
+  render() {
+    const style = StyleSheet.create({
+      tr: {
+        borderBottom: this.props.isHeader ? '2px solid gray' : null,
+        backgroundColor: this.props.isHeader ? '#f5f5f5ab' : '#deb5b545',
+        textAlign: this.props.first ? 'center' : 'left',
+      },
+      rowChecked: {
+        backgroundColor: '#e6e4e4',
+      },
+    });
+
+    if (this.props.isHeader) {
+      if (this.props.textSecondCell) {
+        return (
+          <tr className={css(style.tr)} >
+            <th>{this.props.textFirstCell}</th>
+            <th>{this.props.textSecondCell}</th>
+          </tr>
+        );
+      } else {
+        return ( <tr className={css(style.tr)}><th colSpan="2">{this.props.textFirstCell}</th></tr> );
+      }
+    } else {
+      return (
+        <tr className={`${css(style.tr)} ${this.state.checked ? css(style.rowChecked) : null}`} >
+          <td>
+            <label htmlFor={`course${this.props.id}`} >
+              <input id={`course${this.props.id}`} type='checkbox' onChange={() => this.toggleChecked()} />
+              {this.props.textFirstCell}
+            </label>
+          </td>
+          <td>{this.props.textSecondCell}</td>
+        </tr>
+      );
+    }
+  }
 }
 
 CourseListRow.propTypes = {
   isHeader: PropTypes.bool,
   textFirstCell: PropTypes.string.isRequired,
-  textSecondCell: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  textSecondCell: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 CourseListRow.defaultProps = {
   isHeader: false,
-  textSecondCell: null
+  textSecondCell: null,
 };
-
-const style = StyleSheet.create({
-  thFirt: {
-    textAlign: 'center',
-  },
-  thTd: {
-    padding: '0.25rem',
-    border: '1px solid lightgray',
-  },
-  rowChecked: {
-    backgroundColor: '#e6e4e4'
-  }
-});
-
-export default CourseListRow;

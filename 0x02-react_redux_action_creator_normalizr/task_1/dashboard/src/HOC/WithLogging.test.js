@@ -1,42 +1,30 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { expect as expectChai } from 'chai';
+import { mount } from 'enzyme';
 import WithLogging from './WithLogging';
 import Login from '../Login/Login';
-import { StyleSheetTestUtils } from "aphrodite";
+import { StyleSheetTestUtils } from 'aphrodite';
 
-describe('Test WithLogging.js', () => {
-  beforeAll(() => {
+global.console.log = jest.fn()
+
+describe('WithLogging wraps component', () => {
+
+  beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
   });
-  
-  afterAll(() => {
+
+  afterEach(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('console.log was called on mount and on unmount with Component when the wrapped element is pure html', (done) => {
-    const WrapElement = WithLogging(() => <a></a>);
-    console.log = jest.fn();
-    const wrapper = mount(<WrapElement />);
-    expect(console.log).toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('Component Component is mounted');
+	const spy = jest.spyOn(console, 'log');
+  const wrapper = mount(< WithLogging Wrapped={<Login />} />);
 
-    wrapper.unmount();
-    expect(console.log).toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('Component Component is going to unmount');
-    done();
+  it('to console.log message when mounted', () => {
+    expect(spy).toHaveBeenCalledWith('Component Login is mounted');
   });
 
-  it('console.log was called on mount and on unmount with the name of the component when the wrapped element is the Login component. ', (done) => {
-    const WrapElement = WithLogging(Login);
-    console.log = jest.fn();
-    const wrapper = mount(<WrapElement />);
-    expect(console.log).toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('Component Login is mounted');
-
+  it('to console.log message when unmounted', () => {
     wrapper.unmount();
-    expect(console.log).toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith('Component Login is going to unmount');
-    done();
+    expect(spy).toHaveBeenCalledWith('Component Login is going to unmount');
   });
 });

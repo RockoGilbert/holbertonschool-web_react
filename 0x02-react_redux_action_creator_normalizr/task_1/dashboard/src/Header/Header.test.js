@@ -1,63 +1,58 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { expect as expectChai } from 'chai';
-import App from '../App/App';
+import ReactDOM from 'react-dom';
 import Header from './Header';
-import { StyleSheetTestUtils } from "aphrodite";
-import AppContext, { user, logOut } from "../App/AppContext";
+import { mount } from 'enzyme';
+import { assert } from 'chai';
+import { StyleSheetTestUtils } from 'aphrodite';
+import AppContext from '../App/AppContext';
 
-describe('Test Header.js', () => {
-  const value = { user: user, logOut: logOut};
+describe('Header Renders', () => {
 
-  beforeAll(() => {
+  beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('Header without crashing', (done) => {
-    expectChai(shallow(<AppContext.Provider value={value}><Header/></AppContext.Provider>).exists());
-    done();
+  const header = mount(
+    <AppContext.Provider value={AppContext._currentValue}>
+      <Header />
+    </AppContext.Provider>
+  );
+  // loggedIn context
+  const loggedInContext = {
+    user: { email: 'a@b', password: 'c', isLoggedIn: true },
+    logout: jest.fn(),
+  };
+  const loggedIn = mount(
+    <AppContext.Provider value={loggedInContext}>
+      <Header />
+    </AppContext.Provider>
+  );
+
+  it('without crashing', () => {
+    assert.equal(header.length, 1);
   });
 
-  it('div with the class App-header', (done) => {
-    const wrapper = shallow(<App />);
-    expectChai(wrapper.contains(<header className='App-header' />))
-    done()
+  it('img and h1 tag', () => {
+    assert.equal(header.find('img').length, 1);
+    assert.equal(header.find('h1').length, 1);
   });
 
-  it('renders 1 img and 1 h1', (done) => {
-    const wrapper = mount(<AppContext.Provider value={value}><Header/></AppContext.Provider>);
-    expectChai(wrapper.find('img')).to.have.lengthOf(1);
-    expectChai(wrapper.find('h1')).to.have.lengthOf(1);
-    done();
+  it('NOT #logoutSection', () => {
+    assert.equal(header.find('#logoutSection').length, 0);
   });
 
-  it('test that mounts the Header component with a default context value. Verify that the logoutSection is not created', (done) => {
-    const wrapper = mount(<AppContext.Provider value={value}><Header/></AppContext.Provider>);
-    expectChai(wrapper.find('p#logoutSection')).to.have.lengthOf(0);
-    done();
+  it('#logoutSection once logged in with correct email', () => {
+    assert.equal(loggedIn.find('#logoutSection').length, 1);
+    assert.equal(loggedIn.find('#logoutSection').text(), 'Welcome a@b\xa0(logout)');
   });
 
-  it('test that mounts the Header component with a user defined (isLoggedIn is true and an email is set). Verify that the logoutSection is created', (done) => {
-    value.user.isLoggedIn = true;
-    value.user.email = 'test@test.com';
-    value.user.password = 'test';
-    const wrapper = mount(<AppContext.Provider value={value}><Header/></AppContext.Provider>);
-    expectChai(wrapper.find('p#logoutSection')).to.have.lengthOf(1);
-    done();
+  it('logout button with correct function', () => {
+    loggedIn.find('a').simulate('click');
+    expect(loggedInContext.logout).toHaveBeenCalled();
   });
 
-  it('test that mounts the Header component with a user defined (isLoggedIn is true and an email is set) and the logOut is linked to a spy. Verify that clicking on the link is calling the spy', (done) => {
-    value.user.isLoggedIn = true;
-    value.user.email = 'test@test.com';
-    value.user.password = 'test';
-    value.logOut = jest.fn();
-    const wrapper = mount(<AppContext.Provider value={value}><Header/></AppContext.Provider>);
-    wrapper.find("#logoutSection span").simulate("click");
-    expect(value.logOut).toHaveBeenCalled();
-    done();
-  });
 });

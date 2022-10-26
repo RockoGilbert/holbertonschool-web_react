@@ -1,48 +1,54 @@
 import React from 'react';
+import CourseList from './CourseList';
 import { shallow } from 'enzyme';
-import { expect } from 'chai';
-import CourseList from './CourseList'
-import CourseListRow from './CourseListRow';
-import { StyleSheetTestUtils } from "aphrodite";
+import { assert } from 'chai';
+import { StyleSheetTestUtils } from 'aphrodite';
 
-describe('Test CourseList.js', () => {
-  const listCourses = [
-    { id: 1, name: 'ES6', credit: 60 },
-    { id: 2, name: 'Webpack', credit: 20 },
-    { id: 3, name: 'React', credit: 40 }
-  ];
+const listCourses = [
+  { id: '1', name: 'Test 1', credit: 10 },
+  { id: '2', name: 'Test 2', credit: 20 },
+  { id: '3', name: 'Test 3', credit: 30 },
+];
 
-  beforeAll(() => {
+describe('CourseList Renders', () => {
+
+  beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('CourseList without crashing', (done) => {
-    expect(shallow(<CourseList />).exists());
-    done();
+  const courseList = shallow(<CourseList />);
+  const rows = courseList.find('CourseListRow');
+
+  const listCoursesCL = shallow(<CourseList listCourses={listCourses} />);
+  const listCoursesR = listCoursesCL.find('CourseListRow');
+
+  it('without crashing', () => {
+    assert.equal(courseList.length, 1);
+    assert.equal(listCoursesCL.length, 1);
   });
 
-  it('renders 5 diferent rows', (done) => {
-    const wrapper = shallow(<CourseList listCourses={listCourses}/>);    
-    expect(wrapper.find(CourseListRow)).to.have.lengthOf(5);
-    done();
+  it('with listCourses: 5 rows with array of 3', () => {
+    assert.equal(listCoursesR.length, 5);
   });
 
-  it('Verify that CourseList renders correctly if you pass an empty array or if you don’t pass the listCourses property', (done) => {
-    let wrapper = shallow(<CourseList listCourses={[]}/>);
-    expect(wrapper.find(CourseListRow)).to.have.lengthOf(3);
-    wrapper = shallow(<CourseList />);''
-    expect(wrapper.find(CourseListRow)).to.have.lengthOf(3);
-    done();
+  it('with listCourses: correct text in rows', () => {
+    assert.equal(listCoursesR.at(2).render().find('td').first().text(), 'Test 1');
+    assert.equal(listCoursesR.at(2).render().find('td').last().text(), 10);
+    assert.equal(listCoursesR.at(3).render().find('td').first().text(), 'Test 2');
+    assert.equal(listCoursesR.at(3).render().find('td').last().text(), 20);
+    assert.equal(listCoursesR.at(4).render().find('td').first().text(), 'Test 3');
+    assert.equal(listCoursesR.at(4).render().find('td').last().text(), 30);
   });
 
-  it('verify that when you pass a list of courses, the component renders it correctly', (done) => {
-    const wrapper = shallow(<CourseList listCourses={listCourses}/>);
-    expect(wrapper.find(CourseListRow).first().html()).to.match(/<tr style="background-color:#deb5b545"><th colSpan="2" class="thFirt*/);
-    expect(wrapper.find(CourseListRow)).to.have.lengthOf(5);
-    done();
+  it('Not listCourses: 3 rows', () => {
+    assert.equal(rows.length, 3);
+  });
+
+  it('Not listCourses: correct text in the last row', () => {
+    assert.equal(rows.last().render().find('th').text(), 'No course available yet');
   });
 });

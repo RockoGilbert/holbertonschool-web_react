@@ -1,42 +1,50 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
 import CourseListRow from './CourseListRow';
-import { StyleSheetTestUtils } from "aphrodite";
+import { shallow } from 'enzyme';
+import { assert } from 'chai';
+import { StyleSheetTestUtils } from 'aphrodite';
 
-describe('Test CourseListRow.js', () => {
-  beforeAll(() => {
+describe('CourseListRow Renders', () => {
+
+  beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('CourseListRow without crashing', (done) => {
-    expect(shallow(<CourseListRow textFirstCell='test' />).exists());
-    done();
+  const colSpan2 = shallow(<CourseListRow isHeader={true} textFirstCell='colSpan=2' />);
+  const th2 = shallow(<CourseListRow isHeader={true} textFirstCell='First th' textSecondCell='Second th' />);
+  const td2 = shallow(<CourseListRow textFirstCell='First td' textSecondCell='Second td' />);
+
+  it('without crashing', () => {
+    assert.equal(colSpan2.length, 1);
+    assert.equal(th2.length, 1);
+    assert.equal(td2.length, 1);
   });
 
-  it('renders isHeader is True and render with one th', (done) => {
-    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell='test' />);
-    
-    expect(wrapper.find('th')).to.have.lengthOf(1);
-    expect(wrapper.find('th').props()).to.have.property('colSpan', '2');
-    done();
+  it('colSpan=2 th when isHeader=true & textSecondCell=null', () => {
+    assert.equal(colSpan2.children().length, 1)
+    assert.equal(th2.children().first().type(), 'th');
   });
 
-  it('renders isHeader is True and render with two th', (done) => {
-    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell='test' textSecondCell='test' />);
-    
-    expect(wrapper.find('th')).to.have.lengthOf(2);
-    done();
+  it('th x2 when isHeader=true & textSecondCell != null', () => {
+    assert.equal(th2.children().length, 2);
+    assert.equal(th2.children().first().type(), 'th');
   });
 
-  it('renders isHeader is False and with two td', (done) => {
-    const wrapper = shallow(<CourseListRow isHeader={false} textFirstCell='test' textSecondCell='test' />);
-    
-    expect(wrapper.find('td')).to.have.lengthOf(2);
-    done();
+  it('td x2 when isHeader=true & textSecondCell != null', () => {
+    assert.equal(td2.children().length, 2);
+    assert.equal(td2.children().first().type(), 'td');
   });
-});
+
+  it('checkbox with label that changes the state on change', () => {
+    assert.equal(td2.state().checked, false);
+    assert.equal(td2.find('input').length, 1);
+    assert.equal(td2.find('label').length, 1);
+    td2.find('input').simulate('change');
+    assert.equal(td2.state().checked, true);
+  });
+})
+

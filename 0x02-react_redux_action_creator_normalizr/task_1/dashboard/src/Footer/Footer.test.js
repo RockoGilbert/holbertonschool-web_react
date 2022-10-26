@@ -1,38 +1,49 @@
-import { shallow, mount } from "enzyme";
-import React from "react";
-import Footer from "./Footer";
-import AppContext from "../App/AppContext";
-import { user, logOut } from "../App/AppContext";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Footer from './Footer';
+import { shallow, mount } from 'enzyme';
+import chai from 'chai';
+import { StyleSheetTestUtils } from 'aphrodite';
+import AppContext from '../App/AppContext';
 
-describe("<Footer />", () => {
-  it("Footer renders without crashing", () => {
-    const wrapper = shallow(<Footer />);
-    expect(wrapper.exists()).toEqual(true);
-  });
-  it("Verify that the components at the very least render the text “Copyright”", () => {
-    const wrapper = mount(<Footer />);
-    expect(wrapper.find("div.footer p")).toHaveLength(1);
-    expect(wrapper.find("div.footer p").text()).toContain("Copyright");
+chai.use(require('chai-string'));
+
+describe('Footer Renders', () => {
+
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  it("verify that the link is not displayed when the user is logged out within the context", () => {
-    const wrapper = mount(
-      <AppContext.Provider value={{ user, logOut }}>
+  afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
+
+  const footer = shallow(<Footer />);
+
+  it('without crashing', () => {
+    chai.assert.equal(footer.length, 1);
+  });
+
+  it('"Copyright" within the p element', () => {
+    chai.assert.startsWith(footer.find('p').text(), 'Copyright');
+  });
+
+  it('without a Contact Us link when user is not logged in', () => {
+    chai.assert.equal(footer.find('a').length, 0);
+  });
+
+  it('with a "Contact Us" link with correct href when user is logged in', () => {
+    const loginFooter = mount(
+      <AppContext.Provider value={{
+        user: {
+          isLoggedIn: true,
+        }
+      }}>
         <Footer />
       </AppContext.Provider>
     );
-    expect(wrapper.find("div.footer a")).toHaveLength(0);
-  });
-
-  it("verify that the link is displayed when the user is logged in within the context", () => {
-    const wrapper = mount(
-      <AppContext.Provider
-        value={{ user: { ...user, isLoggedIn: true }, logOut }}
-      >
-        <Footer />
-      </AppContext.Provider>
-    );
-    expect(wrapper.find("div.footer a")).toHaveLength(1);
-    expect(wrapper.find("div.footer a").text()).toEqual("Contact us");
+    chai.assert.equal(loginFooter.find('a').length, 1);
+    chai.assert.equal(loginFooter.find('a').text(), 'Contact Us');
+    chai.assert.equal(loginFooter.find('a').props().href, 'https://github.com/treserio');
   });
 });

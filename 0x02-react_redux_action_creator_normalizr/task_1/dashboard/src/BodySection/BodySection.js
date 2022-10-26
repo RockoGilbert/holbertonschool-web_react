@@ -1,23 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types'; // ES6
+import PropTypes from 'prop-types';
 
-class BodySection extends React.Component {
+export default class BodySection extends React.Component {
   render() {
     return (
-      <div className="bodySection">
+      <div className='BodySection'>
         <h2>{this.props.title}</h2>
         {this.props.children}
       </div>
-    );
+    )
   }
 }
 
 BodySection.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string.isRequired,
 }
-
-BodySection.defaultProps = {
-  title: ''
-}
-
-export default BodySection;

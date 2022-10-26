@@ -1,33 +1,42 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { expect as expectChai } from 'chai';
+import ReactDOM from 'react-dom';
+import { mount } from 'enzyme';
 import BodySectionWithMarginBottom from './BodySectionWithMarginBottom';
-import BodySection from './BodySection';
-import { StyleSheetTestUtils } from "aphrodite";
+import { StyleSheetTestUtils } from 'aphrodite';
 
-describe('Test BodySectionWithMarginBottom.js', () => {
-  beforeAll(() => {
+describe('BodySectionWithMarginBottom Renders', () => {
+  beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('Render without crashing', (done) => {
-    expectChai(shallow(<BodySectionWithMarginBottom title='test title' />).exists());
-    done();
+  const BSMargin = mount(
+    <BodySectionWithMarginBottom title="test title">
+      <p>test child</p>
+    </BodySectionWithMarginBottom>
+  )
+  const bodySection = BSMargin.find('.BodySection');
+  const h2 = BSMargin.find('h2');
+  const p = BSMargin.find('p');
+
+  it('without crashing', () => {
+    expect(BSMargin.length).toBe(1);
   });
 
-  it ('Test if render correctly a BodySection component and that the props are passed correctly to the child component', (done) => {
-    const wrapper = shallow(<BodySectionWithMarginBottom title='test title'><p>test children node</p></BodySectionWithMarginBottom>)
-    expectChai(wrapper.contains(<div className='bodySectionWithMargin' />));
-    expectChai(wrapper.children()).to.have.lengthOf(1);
-    expectChai(wrapper.find(BodySection)).to.have.lengthOf(1);
-    expectChai(wrapper.find(BodySection).children()).to.have.lengthOf(1);
-    expectChai(wrapper.find(BodySection).props().title).to.equal('test title');
-    expectChai(wrapper.find('p')).to.have.lengthOf(1);
-    expectChai(wrapper.find('p').text()).to.equal('test children node');
-    done();
-  })
+  it('with correct CSS class', () => {
+    expect(BSMargin.find('.BodySectionWithMargin').length).toBe(1);
+  });
+
+  it('with correct children', () => {
+    expect(bodySection.length).toBe(1);
+    expect(bodySection.children().length).toBe(2);
+    expect(h2.length).toBe(1);
+    expect(h2.text()).toBe('test title');
+    expect(p.length).toBe(1);
+    expect(p.text()).toBe('test child');
+  });
+
 });

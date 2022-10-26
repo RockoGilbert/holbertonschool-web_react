@@ -1,49 +1,43 @@
 import React from 'react';
-import logo from '../assets/holbertonlogo.jpg';
-import { StyleSheet, css } from 'aphrodite';
-import AppContext from '../App/AppContext'
+import { css, StyleSheet } from 'aphrodite';
+import Holb_Logo from '../assets/Holb_Logo.jpg';
+import AppContext from '../App/AppContext';
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+export default function Header() {
+  const context = React.useContext(AppContext);
 
-  render() {
-    return (
-      <div className={css(style.appHeader)}>
-        <img src={logo} className={css(style.appLogo)} alt='logo' />
-        <h1 className={css(style.appHeaderH1)}>School dashboard</h1>
+  const style =  StyleSheet.create({
+    logo: {
+      width: '240px',
+      height: '240px',
+    },
+    header: {
+      display: 'flex',
+      position: 'relative',
+      alignItems: 'center',
+      borderBottom: 'medium solid red',
+      borderBottomColor: 'red',
+    },
+    logout: {
+      position: 'absolute',
+      border: null,
+      bottom: 0,
+      right: 0,
+      marginRight: '1rem',
+    }
+  });
 
-        { this.context.user.isLoggedIn ?
-          <p id="logoutSection" className={css(style.logOut)}>Welcome {this.context.user.email} (<span onClick={this.context.logOut}>logout</span>)</p>
-          :
-          <></>
-        }
-      </div>
-    );
-  }
+  return (
+    <header className={`App-header ${css(style.header)}`} >
+      <img src={Holb_Logo} className={`App-logo ${css(style.logo)}`} alt="logo" />
+      <h1>School dashboard</h1>
+      {
+        context.user.isLoggedIn ?
+          <p id='logoutSection' className={css(style.logout)} >
+            Welcome {context.user.email}&nbsp;<a onClick={context.logout} href='#'>(logout)</a>
+          </p>
+        : null
+      }
+    </header>
+  )
 }
-
-Header.contextType = AppContext;
-
-const style = StyleSheet.create({
-  appHeader: {
-    backgroundColor: '#fff',
-    borderBottom: '3px solid #e1354b',
-  },
-  appLogo: {
-    width: '200px',
-    height: '200px',
-  },
-  appHeaderH1: {
-    display: 'inline',
-    position: 'relative',
-    top: '-6rem',
-    color: '#e1354b',
-  },
-  logOut: {
-    textAlign: 'end'
-  }
-});
-
-export default Header;
